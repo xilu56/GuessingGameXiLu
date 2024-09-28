@@ -6,30 +6,25 @@ import ConfirmScreen from './screens/ConfirmScreen';
 import GameScreen from './screens/GameScreen';
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState('Start'); // 管理当前屏幕状态
-  const [userData, setUserData] = useState({ name: '', email: '', phone: '' }); // 保存用户输入的数据
+  const [currentScreen, setCurrentScreen] = useState('Start');
+  const [userData, setUserData] = useState({ name: '', email: '', phone: '' });
 
   const handleConfirm = (data) => {
-    setUserData(data); // 保存用户输入的数据
-    setCurrentScreen('Confirm'); // 切换到确认屏幕
+    setUserData(data);
+    setCurrentScreen('Game'); // 直接进入游戏界面
   };
 
   const goBackToStart = () => {
-    setCurrentScreen('Start'); // 返回StartScreen，数据保持不变
-  };
-
-  const goToGame = () => {
-    setCurrentScreen('Game'); // 切换到GameScreen
+    setCurrentScreen('Start');
+    setUserData({ name: '', email: '', phone: '' });
   };
 
   const renderScreen = () => {
     switch (currentScreen) {
       case 'Start':
         return <StartScreen onRegister={handleConfirm} userData={userData} />;
-      case 'Confirm':
-        return <ConfirmScreen userData={userData} goBack={goBackToStart} goToGame={goToGame} />;
       case 'Game':
-        return <GameScreen />;
+        return <GameScreen userData={userData} goBack={goBackToStart} />;
       default:
         return <StartScreen onRegister={handleConfirm} userData={userData} />;
     }
