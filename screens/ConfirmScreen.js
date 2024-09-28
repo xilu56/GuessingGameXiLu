@@ -6,14 +6,15 @@ export default function ConfirmScreen({ userData, goBack, goToGame }) {
   return (
     <View style={styles.screen}>
       <Card>
-        <Text style={styles.header}>Confirm Your Information</Text>
-        <Text style={styles.label}>Name: {userData.name}</Text>
+        <Text style={styles.label}>Hello {userData.name}</Text>
+        <Text style={styles.label}>Here is the information you entered:</Text> 
         <Text style={styles.label}>Email: {userData.email}</Text>
         <Text style={styles.label}>Phone: {userData.phone}</Text>
+        <Text style={styles.label}>If it is not correct, please go back and edit them.</Text>
 
         <View style={styles.buttonContainer}>
-          <Button title="Edit" onPress={goBack} />
-          <Button title="Continue to Game" onPress={goToGame} />
+          <Button title="Go back" onPress={goBack} />
+          <Button title="Continue" onPress={goToGame} />
         </View>
       </Card>
     </View>
