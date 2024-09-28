@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, Alert, StyleSheet, TextInput } from "react-native";
+import { View, Text, Button, Alert, StyleSheet, TextInput, Image } from "react-native";
 import Card from "../components/Card";
 
 export default function GameScreen({ userData, goBack }) {
   const lastDigit = parseInt(userData.phone.slice(-1)); // Get the last digit of the user's phone number
   const [chosenNumber, setChosenNumber] = useState(null); // The number the user needs to guess
   const [attempts, setAttempts] = useState(4); // Number of attempts left
+  const [totalAttempts, setTotalAttempts] = useState(0); // Total attempts used
   const [timeLeft, setTimeLeft] = useState(60); // Countdown timer
   const [started, setStarted] = useState(false); // Whether the game has started or not
   const [inputValue, setInputValue] = useState(""); // User's input value
   const [hintUsed, setHintUsed] = useState(false); // Whether the hint has been used
   const [guessResult, setGuessResult] = useState(null); // Stores whether the guess was correct or needs adjustment
   const [showResultCard, setShowResultCard] = useState(false); // Controls whether to show the result card after a wrong guess
+  const [showSuccessCard, setShowSuccessCard] = useState(false); // Controls whether to show the success card after a correct guess
+  const [gameOver, setGameOver] = useState(false); // Game over state
+  const [gameOverReason, setGameOverReason] = useState(""); // Reason for game over
 
   /**
    * Countdown timer that decreases every second once the game starts.
@@ -21,8 +25,8 @@ export default function GameScreen({ userData, goBack }) {
     if (started && timeLeft > 0) {
       timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000); // Decrease timer every second
     } else if (timeLeft === 0) {
-      Alert.alert("Time's up!", "You've run out of time!");
-      handleRestart();
+        setGameOverReason("Time's up!");
+        setGameOver(true); // Trigger game over when the timer runs out
     }
     return () => clearTimeout(timer); // Clear timer when time reaches 0
   }, [timeLeft, started]);
@@ -60,14 +64,15 @@ export default function GameScreen({ userData, goBack }) {
       return;
     }
 
+    setTotalAttempts(totalAttempts + 1); // Increment total attempts
+
     if (guessedNumber === chosenNumber) {
-      Alert.alert("Congratulations!", "You guessed the correct number!");
-      handleRestart();
+      setShowSuccessCard(true); // Show success card
     } else {
       setAttempts(attempts - 1); // Reduce attempts
       if (attempts - 1 === 0) {
-        Alert.alert("Game Over", "You've run out of attempts.");
-        handleRestart();
+        setGameOverReason("You've run out of attempts.");
+        setGameOver(true); // Trigger game over when attempts run out
       } else {
         const resultMessage = guessedNumber > chosenNumber ? "You should guess lower." : "You should guess higher.";
         setGuessResult(resultMessage);
@@ -106,6 +111,20 @@ export default function GameScreen({ userData, goBack }) {
   };
 
   /**
+   * Restarts the game and chooses a new number.
+   */
+  const handleNewGame = () => {
+    setGameOver(false); // Reset game over state
+    setShowSuccessCard(false); // Hide success card
+    setTimeLeft(60); // Reset timer
+    setAttempts(4); // Reset attempts
+    setInputValue(""); // Clear input
+    setHintUsed(false); // Reset hint state
+    setTotalAttempts(0); // Reset total attempts
+    handleStartGame(); // Start a new game with a new number
+  };
+
+  /**
    * Resets the game by clearing all states and returning to the start screen.
    */
   const handleRestart = () => {
@@ -115,7 +134,8 @@ export default function GameScreen({ userData, goBack }) {
     setChosenNumber(null); // Reset chosen number
     setInputValue(""); // Clear input
     setHintUsed(false); // Reset hint state
-    setShowResultCard(false); // Hide result card
+    setTotalAttempts(0); // Reset total attempts
+    setShowSuccessCard(false); // Hide success card
     goBack(); // Return to the StartScreen
   };
 
@@ -124,12 +144,32 @@ export default function GameScreen({ userData, goBack }) {
       <Text style={styles.restartText} onPress={handleRestart}>
         Restart
       </Text>
-      {!started ? (
+      {gameOver ? (
+        <Card>
+          <Text style={styles.instructionText}>The game is over</Text>
+          <Image
+            source={require("../assets/sad.png")}
+            style={styles.image}
+          />
+          <Text style={styles.instructionText}>{gameOverReason}</Text>
+          <Button title="New Game" onPress={handleNewGame} />
+        </Card>
+      ) : !started ? (
         <Card>
           <Text style={styles.instructionText}>
             Guess a number between 1 & 100 that is a multiply of the last digit of your phone number.
           </Text>
           <Button title="Start" onPress={handleStartGame} />
+        </Card>
+      ) : showSuccessCard ? (
+        <Card>
+          <Text style={styles.instructionText}>You guessed correct!</Text>
+          <Text style={styles.instructionText}>Attempts used: {totalAttempts}</Text>
+          <Image
+            source={{ uri: `https://picsum.photos/id/${chosenNumber}/100/100` }}
+            style={styles.image}
+          />
+          <Button title="New Game" onPress={handleNewGame} />
         </Card>
       ) : showResultCard ? (
         <Card>
@@ -211,5 +251,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginVertical: 20,
   },
 });
