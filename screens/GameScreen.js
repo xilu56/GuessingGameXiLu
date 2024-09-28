@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, Alert, StyleSheet } from "react-native";
+import { View, Text, Button, Alert, StyleSheet, TextInput } from "react-native";
 import Card from "../components/Card";
 
 export default function GameScreen({ userData, goBack }) {
@@ -7,7 +7,9 @@ export default function GameScreen({ userData, goBack }) {
   const [chosenNumber, setChosenNumber] = useState(null); // 用户要猜的数字
   const [attempts, setAttempts] = useState(4); // 猜测次数
   const [timeLeft, setTimeLeft] = useState(60); // 倒计时
-  const [started, setStarted] = useState(false); // 标志游戏是否开始
+  const [started, setStarted] = useState(false); // 游戏是否开始
+  const [inputValue, setInputValue] = useState(""); // 用户输入的值
+  const [hintUsed, setHintUsed] = useState(false); // 用户是否使用了提示
 
   useEffect(() => {
     let timer;
@@ -35,11 +37,44 @@ export default function GameScreen({ userData, goBack }) {
     setStarted(true); // 游戏开始
   };
 
+  const handleGuessSubmit = () => {
+    const guessedNumber = parseInt(inputValue);
+    if (isNaN(guessedNumber) || guessedNumber < 1 || guessedNumber > 100) {
+      Alert.alert("Invalid Input", "Please enter a valid number between 1 and 100.");
+      return;
+    }
+
+    if (guessedNumber === chosenNumber) {
+      Alert.alert("Congratulations!", "You guessed the correct number!");
+      handleRestart();
+    } else {
+      setAttempts(attempts - 1);
+      if (attempts - 1 === 0) {
+        Alert.alert("Game Over", "You've run out of attempts.");
+        handleRestart();
+      } else {
+        Alert.alert("Try Again", "Incorrect guess. Try again.");
+      }
+    }
+  };
+
+  const handleHint = () => {
+    if (!hintUsed) {
+      const hintMessage = chosenNumber % 2 === 0 ? "The number is even." : "The number is odd.";
+      Alert.alert("Hint", hintMessage);
+      setHintUsed(true);
+    } else {
+      Alert.alert("Hint Used", "You can only use one hint.");
+    }
+  };
+
   const handleRestart = () => {
     setStarted(false); // 重置游戏状态
     setTimeLeft(60);
     setAttempts(4);
     setChosenNumber(null);
+    setInputValue("");
+    setHintUsed(false);
     goBack(); // 返回到 StartScreen
   };
 
@@ -53,15 +88,26 @@ export default function GameScreen({ userData, goBack }) {
           <Text style={styles.instructionText}>
             Guess a number between 1 & 100 that is a multiply of the last digit of your phone number.
           </Text>
-          <Text style={styles.instructionText}>
-            You have 60 seconds and 4 attempts to guess correctly.
-          </Text>
           <Button title="Start" onPress={handleStartGame} />
         </Card>
       ) : (
         <Card>
-          <Text style={styles.timerText}>Time Left: {timeLeft} seconds</Text>
-          <Text style={styles.attemptsText}>Attempts Left: {attempts}</Text>
+          <Text style={styles.instructionText}>
+            Guess a number between 1 & 100 that is a multiply of {lastDigit}
+          </Text>
+          <TextInput
+            style={styles.input}
+            keyboardType="number-pad"
+            value={inputValue}
+            onChangeText={setInputValue}
+            placeholder="Enter your guess"
+          />
+          <Text style={styles.attemptsText}>Attempts left: {attempts}</Text>
+          <Text style={styles.timerText}>Timer: {timeLeft}s</Text>
+          <View style={styles.buttonContainer}>
+            <Button title="Use a Hint" onPress={handleHint} />
+            <Button title="Submit guess" onPress={handleGuessSubmit} />
+          </View>
         </Card>
       )}
     </View>
@@ -89,15 +135,31 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 10,
   },
-  timerText: {
-    fontSize: 24,
-    color: "#e91e63",
+  input: {
+    height: 40,
+    borderColor: "#3f51b5",
+    borderWidth: 1,
+    width: "80%",
+    marginBottom: 20,
     textAlign: "center",
+    borderRadius: 5,
+    padding: 10,
   },
   attemptsText: {
     fontSize: 20,
     color: "#673ab7",
     textAlign: "center",
-    marginTop: 10,
+    marginBottom: 10,
+  },
+  timerText: {
+    fontSize: 24,
+    color: "#e91e63",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
 });

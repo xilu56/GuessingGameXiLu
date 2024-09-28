@@ -1,18 +1,21 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import Card from "../components/Card";
 
 export default function ConfirmScreen({ userData, goBack, goToGame }) {
   return (
     <View style={styles.screen}>
-      <Text style={styles.header}>Confirm Your Information</Text>
-      <Text style={styles.label}>Name: {userData.name}</Text>
-      <Text style={styles.label}>Email: {userData.email}</Text>
-      <Text style={styles.label}>Phone: {userData.phone}</Text>
+      <Card>
+        <Text style={styles.header}>Confirm Your Information</Text>
+        <Text style={styles.label}>Name: {userData.name}</Text>
+        <Text style={styles.label}>Email: {userData.email}</Text>
+        <Text style={styles.label}>Phone: {userData.phone}</Text>
 
-      <View style={styles.buttonContainer}>
-        <Button title="Edit" onPress={goBack} />
-        <Button title="Continue to Game" onPress={goToGame} />
-      </View>
+        <View style={styles.buttonContainer}>
+          <Button title="Edit" onPress={goBack} />
+          <Button title="Continue to Game" onPress={goToGame} />
+        </View>
+      </Card>
     </View>
   );
 }
@@ -22,6 +25,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: "#b3e5fc",
   },
   header: {
     fontSize: 22,
@@ -36,6 +40,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-    width: '60%',
+    width: '100%',
   },
 });
