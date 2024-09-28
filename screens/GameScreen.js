@@ -11,6 +11,7 @@ export default function GameScreen({ userData, goBack }) {
   const [started, setStarted] = useState(false); // Whether the game has started or not
   const [inputValue, setInputValue] = useState(""); // User's input value
   const [hintUsed, setHintUsed] = useState(false); // Whether the hint has been used
+  const [hintMessage, setHintMessage] = useState(""); // Hint message
   const [guessResult, setGuessResult] = useState(null); // Stores whether the guess was correct or needs adjustment
   const [showResultCard, setShowResultCard] = useState(false); // Controls whether to show the result card after a wrong guess
   const [showSuccessCard, setShowSuccessCard] = useState(false); // Controls whether to show the success card after a correct guess
@@ -58,40 +59,40 @@ export default function GameScreen({ userData, goBack }) {
    * Handles the user's guess submission. Validates the input and checks if it matches the chosen number.
    */
   const handleGuessSubmit = () => {
-    const guessedNumber = parseInt(inputValue);
-  
-    // Reduce attempts regardless of input validity
-    setAttempts(attempts - 1); 
-  
-    // Check if the user has run out of attempts
-    if (attempts - 1 === 0) {
-      setGameOverReason("You've run out of attempts.");
-      setGameOver(true); // Trigger game over if no attempts are left
-      return; // End the function to prevent further execution
-    }
-  
-    // Validate the input: check if it's a number between 1 and 100 and is a multiple of the last digit
-    if (isNaN(guessedNumber) || guessedNumber < 1 || guessedNumber > 100) {
-      Alert.alert("Invalid Input", `Number has to be a multiple of ${lastDigit} between 1 and 100.`);
-      return; // Stop further execution if the input is invalid
-    }
-  
-    if (guessedNumber % lastDigit !== 0) {
-      Alert.alert("Invalid Input", `Number has to be a multiple of ${lastDigit} between 1 and 100.`);
-      return; // Stop further execution if the input is invalid
-    }
-  
-    // If the input is valid, continue with the game logic
-    setTotalAttempts(totalAttempts + 1); // Increment total attempts
-  
-    if (guessedNumber === chosenNumber) {
-      setShowSuccessCard(true); // Show success card if the guess is correct
-    } else {
-      const resultMessage = guessedNumber > chosenNumber ? "You should guess lower." : "You should guess higher.";
-      setGuessResult(resultMessage);
-      setShowResultCard(true); // Show the "Try Again" card with feedback
-    }
-  };
+  const guessedNumber = parseInt(inputValue);
+
+  // Reduce attempts regardless of input validity
+  setAttempts(attempts - 1); 
+
+  // Check if the user has run out of attempts
+  if (attempts - 1 === 0) {
+    setGameOverReason("You've run out of attempts.");
+    setGameOver(true); // Trigger game over if no attempts are left
+    return; // End the function to prevent further execution
+  }
+
+  // Validate the input: check if it's a number between 1 and 100 and is a multiple of the last digit
+  if (isNaN(guessedNumber) || guessedNumber < 1 || guessedNumber > 100) {
+    Alert.alert("Invalid Input", `Number has to be a multiple of ${lastDigit} between 1 and 100.`);
+    return; // Stop further execution if the input is invalid
+  }
+
+  if (guessedNumber % lastDigit !== 0) {
+    Alert.alert("Invalid Input", `Number has to be a multiple of ${lastDigit} between 1 and 100.`);
+    return; // Stop further execution if the input is invalid
+  }
+
+  // If the input is valid, continue with the game logic
+  setTotalAttempts(totalAttempts + 1); // Increment total attempts
+
+  if (guessedNumber === chosenNumber) {
+    setShowSuccessCard(true); // Show success card if the guess is correct
+  } else {
+    const resultMessage = guessedNumber > chosenNumber ? "You should guess lower." : "You should guess higher.";
+    setGuessResult(resultMessage);
+    setShowResultCard(true); // Show the "Try Again" card with feedback
+  }
+};
 
   /**
    * Clears the input and allows the user to try guessing again without resetting the game.
@@ -107,7 +108,7 @@ export default function GameScreen({ userData, goBack }) {
   const handleHint = () => {
     if (!hintUsed) {
       const hintMessage = chosenNumber % 2 === 0 ? "The number is even." : "The number is odd.";
-      Alert.alert("Hint", hintMessage);
+      setHintMessage(hintMessage); // Set the hint message
       setHintUsed(true); // Mark the hint as used
     } else {
       Alert.alert("Hint Used", "You can only use one hint.");
@@ -132,6 +133,8 @@ export default function GameScreen({ userData, goBack }) {
     setAttempts(4); // Reset attempts
     setInputValue(""); // Clear input
     setHintUsed(false); // Reset hint state
+    setHintMessage(""); // Clear hint message
+    setGuessResult(null); // Clear guess result
     setTotalAttempts(0); // Reset total attempts
     handleStartGame(); // Start a new game with a new number
   };
@@ -204,6 +207,7 @@ export default function GameScreen({ userData, goBack }) {
             onChangeText={setInputValue}
             placeholder="Enter your guess"
           />
+        {hintMessage ? <Text style={styles.instructionText}>{hintMessage}</Text> : null}
           <Text style={styles.attemptsText}>Attempts left: {attempts}</Text>
           <Text style={styles.timerText}>Timer: {timeLeft}s</Text>
           <View style={styles.buttonContainer}>
