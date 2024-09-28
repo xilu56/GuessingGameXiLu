@@ -3,23 +3,23 @@ import { View, Text, Button, Alert, StyleSheet, TextInput } from "react-native";
 import Card from "../components/Card";
 
 export default function GameScreen({ userData, goBack }) {
-  const lastDigit = parseInt(userData.phone.slice(-1)); // 获取手机号最后一位数字
-  const [chosenNumber, setChosenNumber] = useState(null); // 用户要猜的数字
-  const [attempts, setAttempts] = useState(4); // 猜测次数
-  const [timeLeft, setTimeLeft] = useState(60); // 倒计时
-  const [started, setStarted] = useState(false); // 游戏是否开始
-  const [inputValue, setInputValue] = useState(""); // 用户输入的值
-  const [hintUsed, setHintUsed] = useState(false); // 用户是否使用了提示
+  const lastDigit = parseInt(userData.phone.slice(-1));
+  const [chosenNumber, setChosenNumber] = useState(null);
+  const [attempts, setAttempts] = useState(4);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [started, setStarted] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [hintUsed, setHintUsed] = useState(false);
 
   useEffect(() => {
     let timer;
     if (started && timeLeft > 0) {
-      timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000); // 每秒倒计时
+      timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
     } else if (timeLeft === 0) {
       Alert.alert("Time's up!", "You've run out of time!");
       handleRestart();
     }
-    return () => clearTimeout(timer); // 清除计时器
+    return () => clearTimeout(timer);
   }, [timeLeft, started]);
 
   const generateMultiples = (digit) => {
@@ -31,10 +31,10 @@ export default function GameScreen({ userData, goBack }) {
   };
 
   const handleStartGame = () => {
-    const multiples = generateMultiples(lastDigit); // 生成用户最后一位数字的倍数
+    const multiples = generateMultiples(lastDigit);
     const randomIndex = Math.floor(Math.random() * multiples.length);
-    setChosenNumber(multiples[randomIndex]); // 随机选择一个倍数作为目标数字
-    setStarted(true); // 游戏开始
+    setChosenNumber(multiples[randomIndex]);
+    setStarted(true);
   };
 
   const handleGuessSubmit = () => {
@@ -69,13 +69,13 @@ export default function GameScreen({ userData, goBack }) {
   };
 
   const handleRestart = () => {
-    setStarted(false); // 重置游戏状态
+    setStarted(false);
     setTimeLeft(60);
     setAttempts(4);
     setChosenNumber(null);
     setInputValue("");
     setHintUsed(false);
-    goBack(); // 返回到 StartScreen
+    goBack(); //
   };
 
   return (
