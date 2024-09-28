@@ -60,9 +60,12 @@ export default function GameScreen({ userData, goBack }) {
   const handleGuessSubmit = () => {
     const guessedNumber = parseInt(inputValue);
     if (isNaN(guessedNumber) || guessedNumber < 1 || guessedNumber > 100) {
-      Alert.alert("Invalid Input", "Please enter a valid number between 1 and 100.");
+        Alert.alert("Invalid Input", `Number has to be a multiple of ${lastDigit} between 1 and 100.`);
       return;
     }
+    if (guessedNumber % lastDigit !== 0) {
+        Alert.alert("Invalid Input", `Number has to be a multiple of ${lastDigit} between 1 and 100.`);
+      }
 
     setTotalAttempts(totalAttempts + 1); // Increment total attempts
 
@@ -157,7 +160,7 @@ export default function GameScreen({ userData, goBack }) {
       ) : !started ? (
         <Card>
           <Text style={styles.instructionText}>
-            Guess a number between 1 & 100 that is a multiply of the last digit of your phone number.
+            Guess a number between 1 & 100 that is a multiply of the last digit of {lastDigit}.
           </Text>
           <Button title="Start" onPress={handleStartGame} />
         </Card>
