@@ -4,10 +4,10 @@ import Card from "../components/Card";
 import InputWithError from "../components/InputWithError";
 import CheckBox from "../components/CheckBox";
 
-export default function StartScreen({ navigation }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+export default function StartScreen({ onRegister, userData }) {
+  const [name, setName] = useState(userData.name || "");  // 使用传入的数据
+  const [email, setEmail] = useState(userData.email || "");
+  const [phone, setPhone] = useState(userData.phone || "");
   const [isChecked, setIsChecked] = useState(false);
   const [errors, setErrors] = useState({ name: "", email: "", phone: "" });
 
@@ -43,7 +43,7 @@ export default function StartScreen({ navigation }) {
     if (!name || !email || !phone || errors.name || errors.email || errors.phone) {
       Alert.alert("Error", "Please fix the errors before registering!");
     } else {
-      navigation.navigate("ConfirmScreen", { name, email, phone });
+      onRegister({ name, email, phone });  // 调用回调函数切换到确认屏幕
     }
   };
 
@@ -118,3 +118,4 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
 });
+
