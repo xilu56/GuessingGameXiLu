@@ -26,7 +26,7 @@ export default function GameScreen({ userData, goBack }) {
     if (started && timeLeft > 0) {
       timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000); // Decrease timer every second
     } else if (timeLeft === 0) {
-        setGameOverReason("Time's up!");
+        setGameOverReason("You are out of time");
         setGameOver(true); // Trigger game over when the timer runs out
     }
     return () => clearTimeout(timer); // Clear timer when time reaches 0
@@ -66,7 +66,7 @@ export default function GameScreen({ userData, goBack }) {
 
   // Check if the user has run out of attempts
   if (attempts - 1 === 0) {
-    setGameOverReason("You've run out of attempts.");
+    setGameOverReason("You are out of attempts");
     setGameOver(true); // Trigger game over if no attempts are left
     return; // End the function to prevent further execution
   }
@@ -119,9 +119,10 @@ export default function GameScreen({ userData, goBack }) {
    * Ends the game and returns to the start screen after displaying a "Game Over" message.
    */
   const handleEndGame = () => {
-    Alert.alert("Game Over", "Thank you for playing.");
-    handleRestart();
-  };
+      setGameOverReason("You chose to end the game"); // Set the game over reason to indicate the user ended the game
+      setGameOver(true); // Trigger game over
+   };
+
 
   /**
    * Restarts the game and chooses a new number.
@@ -133,9 +134,10 @@ export default function GameScreen({ userData, goBack }) {
     setAttempts(4); // Reset attempts
     setInputValue(""); // Clear input
     setHintUsed(false); // Reset hint state
-    setHintMessage(""); // Clear hint message
-    setGuessResult(null); // Clear guess result
+    setHintMessage(""); // Clear the hint message
     setTotalAttempts(0); // Reset total attempts
+    setGuessResult(null); // Clear guess result
+    setShowResultCard(false); // Hide result card
     handleStartGame(); // Start a new game with a new number
   };
 
