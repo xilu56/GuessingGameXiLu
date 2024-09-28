@@ -5,7 +5,7 @@ import InputWithError from "../components/InputWithError";
 import CheckBox from "../components/CheckBox";
 
 export default function StartScreen({ onRegister, userData }) {
-  const [name, setName] = useState(userData.name || "");  // 使用传入的数据
+  const [name, setName] = useState(userData.name || ""); 
   const [email, setEmail] = useState(userData.email || "");
   const [phone, setPhone] = useState(userData.phone || "");
   const [isChecked, setIsChecked] = useState(false);
@@ -41,9 +41,9 @@ export default function StartScreen({ onRegister, userData }) {
 
   const handleRegister = () => {
     if (!name || !email || !phone || errors.name || errors.email || errors.phone) {
-      Alert.alert("Error", "Please fix the errors before registering!");
+      Alert.alert("Invalid Input", "Please check the input values!");
     } else {
-      onRegister({ name, email, phone });  // 调用回调函数切换到确认屏幕
+      onRegister({ name, email, phone }); 
     }
   };
 
