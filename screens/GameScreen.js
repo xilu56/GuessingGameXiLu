@@ -59,28 +59,37 @@ export default function GameScreen({ userData, goBack }) {
    */
   const handleGuessSubmit = () => {
     const guessedNumber = parseInt(inputValue);
-    if (isNaN(guessedNumber) || guessedNumber < 1 || guessedNumber > 100) {
-        Alert.alert("Invalid Input", `Number has to be a multiple of ${lastDigit} between 1 and 100.`);
-      return;
+  
+    // Reduce attempts regardless of input validity
+    setAttempts(attempts - 1); 
+  
+    // Check if the user has run out of attempts
+    if (attempts - 1 === 0) {
+      setGameOverReason("You've run out of attempts.");
+      setGameOver(true); // Trigger game over if no attempts are left
+      return; // End the function to prevent further execution
     }
+  
+    // Validate the input: check if it's a number between 1 and 100 and is a multiple of the last digit
+    if (isNaN(guessedNumber) || guessedNumber < 1 || guessedNumber > 100) {
+      Alert.alert("Invalid Input", `Number has to be a multiple of ${lastDigit} between 1 and 100.`);
+      return; // Stop further execution if the input is invalid
+    }
+  
     if (guessedNumber % lastDigit !== 0) {
-        Alert.alert("Invalid Input", `Number has to be a multiple of ${lastDigit} between 1 and 100.`);
-      }
-
+      Alert.alert("Invalid Input", `Number has to be a multiple of ${lastDigit} between 1 and 100.`);
+      return; // Stop further execution if the input is invalid
+    }
+  
+    // If the input is valid, continue with the game logic
     setTotalAttempts(totalAttempts + 1); // Increment total attempts
-
+  
     if (guessedNumber === chosenNumber) {
-      setShowSuccessCard(true); // Show success card
+      setShowSuccessCard(true); // Show success card if the guess is correct
     } else {
-      setAttempts(attempts - 1); // Reduce attempts
-      if (attempts - 1 === 0) {
-        setGameOverReason("You've run out of attempts.");
-        setGameOver(true); // Trigger game over when attempts run out
-      } else {
-        const resultMessage = guessedNumber > chosenNumber ? "You should guess lower." : "You should guess higher.";
-        setGuessResult(resultMessage);
-        setShowResultCard(true); // Show the "Try Again" card
-      }
+      const resultMessage = guessedNumber > chosenNumber ? "You should guess lower." : "You should guess higher.";
+      setGuessResult(resultMessage);
+      setShowResultCard(true); // Show the "Try Again" card with feedback
     }
   };
 
