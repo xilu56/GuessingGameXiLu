@@ -8,27 +8,34 @@ import GameScreen from './screens/GameScreen';
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('Start');
   const [userData, setUserData] = useState({ name: '', email: '', phone: '' });
+  const [checkboxState, setCheckboxState] = useState(false); // Manage checkbox state
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false); // Manage modal visibility
 
-  const handleConfirm = (data) => {
-    setUserData(data);
-    setCurrentScreen('Confirm');
+  const handleConfirm = (data, checkbox) => {
+    setUserData(data); // Save user data
+    setCheckboxState(checkbox); // Save checkbox state
+    setIsConfirmVisible(true); // Show confirm screen as modal
   };
 
   const goToGame = () => {
-    setCurrentScreen('Game');
+    setIsConfirmVisible(false); // Close modal
+    setCurrentScreen('Game'); // Navigate to game screen
   };
 
   const goBackToStart = () => {
-    setCurrentScreen('Start'); 
-    setUserData({ name: '', email: '', phone: '' });
+    setIsConfirmVisible(false); // Close modal and go back to StartScreen
   };
 
   const renderScreen = () => {
     switch (currentScreen) {
       case 'Start':
-        return <StartScreen onRegister={handleConfirm} userData={userData} />;
-      case 'Confirm':
-        return <ConfirmScreen userData={userData} goBack={goBackToStart} goToGame={goToGame} />;
+        return (
+          <StartScreen
+            onRegister={handleConfirm}
+            userData={userData}
+            checkboxState={checkboxState}
+          />
+        );
       case 'Game':
         return <GameScreen userData={userData} goBack={goBackToStart} />;
       default:
@@ -40,6 +47,13 @@ export default function App() {
     <View style={styles.container}>
       <StatusBar style="auto" />
       {renderScreen()}
+      {/* ConfirmScreen as a modal */}
+      <ConfirmScreen
+        userData={userData}
+        isVisible={isConfirmVisible}
+        goBack={goBackToStart}
+        goToGame={goToGame}
+      />
     </View>
   );
 }

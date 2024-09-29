@@ -1,16 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Alert, StyleSheet, Button } from "react-native";
 import Card from "../components/Card";
 import InputWithError from "../components/InputWithError";
 import CheckBox from "../components/CheckBox";
-import {colors} from "../helpers/styles"; // Import colors from the styles helper
+import { colors } from "../helpers/styles"; // Import colors from the styles helper
 
-export default function StartScreen({ onRegister, userData }) {
+export default function StartScreen({ onRegister, userData, checkboxState }) {
   const [name, setName] = useState(userData.name || ""); 
   const [email, setEmail] = useState(userData.email || "");
   const [phone, setPhone] = useState(userData.phone || "");
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(checkboxState || false);
   const [errors, setErrors] = useState({ name: "", email: "", phone: "" });
+
+  useEffect(() => {
+    setName(userData.name); // Pre-fill with entered values
+    setEmail(userData.email);
+    setPhone(userData.phone);
+    setIsChecked(checkboxState); // Ensure checkbox is checked
+  }, [userData, checkboxState]);
 
   const validateName = (input) => {
     if (!isNaN(input) || input.length < 2) {
@@ -44,7 +51,7 @@ export default function StartScreen({ onRegister, userData }) {
     if (!name || !email || !phone || errors.name || errors.email || errors.phone) {
       Alert.alert("Invalid Input", "Please check the input values!");
     } else {
-      onRegister({ name, email, phone }); 
+      onRegister({ name, email, phone }, isChecked); // Pass data and checkbox state
     }
   };
 
@@ -124,4 +131,3 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
 });
-
