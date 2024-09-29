@@ -3,6 +3,7 @@ import { View, Text, Alert, StyleSheet, Button } from "react-native";
 import Card from "../components/Card";
 import InputWithError from "../components/InputWithError";
 import CheckBox from "../components/CheckBox";
+import {colors} from "../helpers/styles"; // Import colors from the styles helper
 
 export default function StartScreen({ onRegister, userData }) {
   const [name, setName] = useState(userData.name || ""); 
@@ -81,10 +82,15 @@ export default function StartScreen({ onRegister, userData }) {
         <CheckBox value={isChecked} onValueChange={setIsChecked} label="I am not a robot" />
         <View style={styles.buttonContainer}>
           <View style={styles.buttonWrapper}>
-            <Button title="Reset" color="#d32f2f" onPress={handleReset} />
+            <Button title="Reset" color={colors.primary} onPress={handleReset} />
           </View>
           <View style={[styles.buttonWrapper, !isChecked && styles.disabledButton]}>
-            <Button title="Register" color={isChecked ? "#1976d2" : "#ccc"} onPress={handleRegister} disabled={!isChecked} />
+            <Button
+              title="Register"
+              color={colors.primary} // Assign a color for the button
+              onPress={handleRegister}
+              disabled={!isChecked} // Disable the button if the checkbox is unchecked
+            />
           </View>
         </View>
       </Card>
@@ -97,12 +103,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#b3e5fc", // Light blue background
+    backgroundColor: colors.background,
   },
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    color: "#3f51b5",
+    color: colors.textPrimary,
     marginBottom: 20,
   },
   buttonContainer: {

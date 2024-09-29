@@ -1,5 +1,6 @@
 import React from "react";
 import { View, TextInput, Text, StyleSheet } from "react-native";
+import {colors} from "../helpers/styles"; // Import colors from the styles helper
 
 export default function InputWithError({ placeholder, value, onChangeText, error, keyboardType }) {
   return (
@@ -23,18 +24,18 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   label: {
-    color: "#3f51b5",
+    color: colors.textPrimary, // Use textPrimary color for label
     fontWeight: "bold",
     marginBottom: 5,
   },
   input: {
     borderBottomWidth: 1,
-    borderBottomColor: "#3f51b5", // blue border
+    borderBottomColor: colors.textPrimary, // Use textPrimary color for border
     padding: 5,
     width: "100%",
   },
   errorText: {
-    color: "red",
+    color: colors.danger, // Use danger color for error message
     fontSize: 12,
     marginTop: 5,
   },

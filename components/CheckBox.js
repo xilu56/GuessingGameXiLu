@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { colors } from "../helpers/styles"; // Import colors from the styles helper
 
 export default function CustomCheckBox({ value, onValueChange }) {
   return (
@@ -26,13 +27,13 @@ const styles = StyleSheet.create({
     height: 24,
     borderWidth: 2,
     borderRadius: 4,
-    borderColor: "#3f51b5",
+    borderColor: colors.textPrimary, // Use textPrimary color from styles
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
   },
   checkboxChecked: {
-    backgroundColor: "#3f51b5",
+    backgroundColor: colors.primary, // Use primary color when checked
   },
   checkmark: {
     color: "white",
@@ -41,6 +42,6 @@ const styles = StyleSheet.create({
   label: {
     marginLeft: 8,
     fontSize: 16,
-    color: "#3f51b5",
+    color: colors.textPrimary, // Use textPrimary color for the label
   },
 });
