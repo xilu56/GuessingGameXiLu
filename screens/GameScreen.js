@@ -3,7 +3,7 @@ import { View, Text, Button, Alert, StyleSheet, TextInput, Image } from "react-n
 import Card from "../components/Card";
 import {colors} from "../helpers/styles"; // Import colors from the styles helper
 
-export default function GameScreen({ userData, goBack }) {
+export default function GameScreen({ userData, onRestart, goBackToStart }) {
   const lastDigit = parseInt(userData.phone.slice(-1)); // Get the last digit of the user's phone number
   const [chosenNumber, setChosenNumber] = useState(null); // The number the user needs to guess
   const [attempts, setAttempts] = useState(4); // Number of attempts left
@@ -154,7 +154,7 @@ export default function GameScreen({ userData, goBack }) {
     setHintUsed(false); // Reset hint state
     setTotalAttempts(0); // Reset total attempts
     setShowSuccessCard(false); // Hide success card
-    goBack(); // Return to the StartScreen
+    goBackToStart(); // Return to the start screen
   };
 
   return (
@@ -170,7 +170,6 @@ export default function GameScreen({ userData, goBack }) {
             style={styles.image}
           />
           <Text style={styles.instructionText}>{gameOverReason}</Text>
-          <Button title="New Game" onPress={handleNewGame} />
         </Card>
       ) : !started ? (
         <Card>

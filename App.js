@@ -26,6 +26,13 @@ export default function App() {
     setIsConfirmVisible(false); // Close modal and go back to StartScreen
   };
 
+  const restartToRegister = () => {
+    setIsConfirmVisible(false); // Close modal and go back to StartScreen
+    setCurrentScreen('Start');
+    setUserData({ name: '', email: '', phone: '' }); // Reset user data
+    setCheckboxState(false); // Reset checkbox state
+  }
+
   const renderScreen = () => {
     switch (currentScreen) {
       case 'Start':
@@ -37,7 +44,7 @@ export default function App() {
           />
         );
       case 'Game':
-        return <GameScreen userData={userData} goBack={goBackToStart} />;
+        return <GameScreen userData={userData} goBackToStart={restartToRegister} />;  // Pass goBackToStart correctly
       default:
         return <StartScreen onRegister={handleConfirm} userData={userData} />;
     }
@@ -52,6 +59,7 @@ export default function App() {
         userData={userData}
         isVisible={isConfirmVisible}
         goBack={goBackToStart}
+        onRequestClose={restartToRegister}
         goToGame={goToGame}
       />
     </View>
