@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import Card from "../components/Card";
-
+import {colors} from "../helpers/styles"; // Import colors from the styles helper
 export default function ConfirmScreen({ userData, goBack, goToGame }) {
   return (
     <View style={styles.screen}>
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: "#b3e5fc",
+    backgroundColor: colors.background,
   },
   header: {
     fontSize: 22,
