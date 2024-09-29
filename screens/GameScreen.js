@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, Alert, StyleSheet, TextInput, Image } from "react-native";
 import Card from "../components/Card";
+import {colors} from "../helpers/styles"; // Import colors from the styles helper
 
 export default function GameScreen({ userData, goBack }) {
   const lastDigit = parseInt(userData.phone.slice(-1)); // Get the last digit of the user's phone number
@@ -227,25 +228,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#b3e5fc",
+    backgroundColor: colors.background,
   },
   restartText: {
     position: "absolute",
     top: 40,
     right: 20,
     fontSize: 18,
-    color: "#1976d2",
+    color: colors.textPrimary,
     fontWeight: "bold",
   },
   instructionText: {
     fontSize: 18,
-    color: "#3f51b5",
+    color: colors.textPrimary,
     textAlign: "center",
     marginVertical: 10,
   },
   input: {
     height: 40,
-    borderColor: "#3f51b5",
+    borderColor: colors.textPrimary,
     borderWidth: 1,
     width: "80%",
     marginBottom: 20,
@@ -255,13 +256,13 @@ const styles = StyleSheet.create({
   },
   attemptsText: {
     fontSize: 20,
-    color: "#673ab7",
+    color: colors.textPrimary,
     textAlign: "center",
     marginBottom: 10,
   },
   timerText: {
     fontSize: 24,
-    color: "#e91e63",
+    color: colors.textPrimary,
     textAlign: "center",
     marginBottom: 20,
   },
