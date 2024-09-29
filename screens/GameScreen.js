@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     top: 40,
     right: 20,
     fontSize: 18,
-    color: colors.textPrimary,
+    color: colors.alert,
     fontWeight: "bold",
   },
   instructionText: {
@@ -256,13 +256,13 @@ const styles = StyleSheet.create({
   },
   attemptsText: {
     fontSize: 20,
-    color: colors.textPrimary,
+    color: colors.primary,
     textAlign: "center",
     marginBottom: 10,
   },
   timerText: {
     fontSize: 24,
-    color: colors.textPrimary,
+    color: colors.alert,
     textAlign: "center",
     marginBottom: 20,
   },

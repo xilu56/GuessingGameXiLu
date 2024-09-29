@@ -82,7 +82,7 @@ export default function StartScreen({ onRegister, userData }) {
         <CheckBox value={isChecked} onValueChange={setIsChecked} label="I am not a robot" />
         <View style={styles.buttonContainer}>
           <View style={styles.buttonWrapper}>
-            <Button title="Reset" color={colors.primary} onPress={handleReset} />
+            <Button title="Reset" color={colors.alert} onPress={handleReset} />
           </View>
           <View style={[styles.buttonWrapper, !isChecked && styles.disabledButton]}>
             <Button

@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   errorText: {
-    color: colors.danger, // Use danger color for error message
+    color: colors.alert, // Use alert color for error message
     fontSize: 12,
     marginTop: 5,
   },
